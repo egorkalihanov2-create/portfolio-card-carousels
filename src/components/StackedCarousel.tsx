@@ -17,6 +17,9 @@ interface StackedCarouselProps {
 export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
   const [order, setOrder] = useState(projects);
   const [isMobile, setIsMobile] = useState(false);
+  const [concealedIds, setConcealedIds] = useState<Set<string>>(
+    () => new Set(),
+  );
   const activeX = useMotionValue(0);
   const activeOpacity = useMotionValue(1);
   const reduceMotion = useReducedMotion();
@@ -38,6 +41,7 @@ export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
 
       const duration = reduceMotion ? 0.01 : 0.28;
       const exitDistance = direction * Math.max(window.innerWidth * 0.72, 420);
+      const outgoingId = order[0].id;
 
       await Promise.all([
         animate(activeOpacity, 0, { duration, ease: "easeOut" }),
@@ -47,10 +51,24 @@ export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
         }),
       ]);
 
-      flushSync(() => setOrder(nextOrder));
+      flushSync(() => {
+        setConcealedIds((current) => new Set(current).add(outgoingId));
+        setOrder(nextOrder);
+      });
       activeX.set(0);
       activeOpacity.set(1);
       isTransitioning.current = false;
+
+      window.setTimeout(
+        () => {
+          setConcealedIds((current) => {
+            const next = new Set(current);
+            next.delete(outgoingId);
+            return next;
+          });
+        },
+        reduceMotion ? 0 : 650,
+      );
     },
     [activeOpacity, activeX, order, reduceMotion],
   );
@@ -132,7 +150,10 @@ export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
                 style={
                   isActive
                     ? { x: activeX, opacity: activeOpacity }
-                    : { x: 0, opacity: 1 }
+                    : {
+                        x: 0,
+                        opacity: concealedIds.has(project.id) ? 0 : 1,
+                      }
                 }
                 onDragStart={() => {
                   didDrag.current = false;
