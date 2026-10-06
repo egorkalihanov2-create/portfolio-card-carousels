@@ -143,6 +143,9 @@ export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
             >
               <motion.div
                 className="stacked-carousel__swipe-card"
+                key={`${project.id}-${isActive ? "active" : "inactive"}-${
+                  concealedIds.has(project.id) ? "concealed" : "visible"
+                }`}
                 drag={isActive && isMobile ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.72}
