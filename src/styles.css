@@ -68,6 +68,17 @@ button:focus-visible,
   border-top: 1px solid #d2d2cf;
 }
 
+.showcase-section--perspective {
+  display: grid;
+  min-height: 92svh;
+  place-items: center;
+  padding: 94px 0 48px;
+  background:
+    radial-gradient(circle at 50% 45%, #fff 0%, rgba(255, 255, 255, 0) 52%),
+    #f2f1ed;
+  border-top: 1px solid #d8d8d4;
+}
+
 .section-label {
   position: absolute;
   inset: 24px 30px auto;
@@ -308,6 +319,53 @@ button:focus-visible,
   right: 24px;
 }
 
+.perspective-carousel {
+  position: relative;
+  width: 100%;
+  height: min(68svh, 660px);
+  min-height: 470px;
+  overflow: hidden;
+  perspective: 1450px;
+  perspective-origin: center 47%;
+  touch-action: pan-y;
+}
+
+.perspective-carousel__stage {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  cursor: grab;
+}
+
+.perspective-carousel__stage:active {
+  cursor: grabbing;
+}
+
+.perspective-carousel__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(47vw, 640px);
+  transform-style: preserve-3d;
+  translate: -50% -50%;
+  will-change: transform, opacity;
+}
+
+.perspective-carousel__card .project-card {
+  box-shadow: 0 17px 45px rgba(41, 41, 38, 0.14);
+}
+
+.perspective-carousel__hint {
+  position: absolute;
+  right: 30px;
+  bottom: 20px;
+  margin: 0;
+  color: #888883;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -496,6 +554,29 @@ button:focus-visible,
 
   .carousel-arrow {
     display: none;
+  }
+
+  .showcase-section--perspective {
+    min-height: 78svh;
+    padding-block: 84px 32px;
+  }
+
+  .perspective-carousel {
+    height: 57svh;
+    min-height: 430px;
+    perspective: 1000px;
+  }
+
+  .perspective-carousel__card {
+    width: 78vw;
+  }
+
+  .perspective-carousel__hint {
+    right: auto;
+    bottom: 13px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
   }
 
   .modal-backdrop {

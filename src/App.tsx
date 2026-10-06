@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { HorizontalCarousel } from "./components/HorizontalCarousel";
+import { PerspectiveCarousel } from "./components/PerspectiveCarousel";
 import { ProjectModal } from "./components/ProjectModal";
 import { StackedCarousel } from "./components/StackedCarousel";
 import { projects } from "./data/projects";
@@ -25,6 +26,14 @@ function App() {
           <span>02 / carousel</span>
         </header>
         <HorizontalCarousel projects={projects} onOpen={setSelectedProject} />
+      </section>
+
+      <section className="showcase-section showcase-section--perspective">
+        <header className="section-label">
+          <span>Featured projects</span>
+          <span>03 / perspective</span>
+        </header>
+        <PerspectiveCarousel projects={projects} onOpen={setSelectedProject} />
       </section>
 
       <ProjectModal project={selectedProject} onClose={closeProject} />
