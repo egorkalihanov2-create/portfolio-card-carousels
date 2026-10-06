@@ -59,16 +59,15 @@ export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
       activeOpacity.set(1);
       isTransitioning.current = false;
 
-      window.setTimeout(
-        () => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
           setConcealedIds((current) => {
             const next = new Set(current);
             next.delete(outgoingId);
             return next;
           });
-        },
-        reduceMotion ? 0 : 650,
-      );
+        });
+      });
     },
     [activeOpacity, activeX, order, reduceMotion],
   );
@@ -133,7 +132,15 @@ export function StackedCarousel({ projects, onOpen }: StackedCarouselProps) {
               transition={
                 reduceMotion
                   ? { duration: 0 }
-                  : { type: "spring", stiffness: 270, damping: 27, mass: 0.8 }
+                  : {
+                      default: {
+                        type: "spring",
+                        stiffness: 270,
+                        damping: 27,
+                        mass: 0.8,
+                      },
+                      opacity: { duration: 0 },
+                    }
               }
               style={{
                 zIndex: order.length - index,
